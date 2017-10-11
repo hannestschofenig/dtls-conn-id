@@ -51,10 +51,10 @@ This document specifies the "Connection ID" concept for the Datagram Transport L
 
 A Connection ID is an identifier carried in the record layer header that gives the
 recipient additional information for selecting the appropriate security association.
-In "classical" DTLS selecting a security association of an incoming DTLS record
+In "classical" DTLS, selecting a security association of an incoming DTLS record
 is accomplished with the help of the 5-tuple. If the source IP address and/or
-source port changes during the lifetime of an ongoing DTLS session changes then the
-receiver will be unable to locate the correct security security context.
+source port changes during the lifetime of an ongoing DTLS session then the
+receiver will be unable to locate the correct security context.
 
 --- middle
 
@@ -64,7 +64,7 @@ receiver will be unable to locate the correct security security context.
 The Datagram Transport Layer Security (DTLS) protocol was designed for securing
 connection-less transports, like UDP. DTLS, like TLS, starts with a handshake,
 which can be computationally demanding (particularly when public key cryptography
-is used). After a successful handshake symmetric key cryptography is used to
+is used). After a successful handshake, symmetric key cryptography is used to
 apply data origin authentication, integrity and confidentiality protection. This
 two-step approach allows to amortize the cost of the initial handshake to subsequent
 application data protection. Ideally, the second phase where application data is
@@ -143,7 +143,7 @@ In DTLS 1.2, connection ids are exchanged at the beginning of the DTLS
 session only. There is no dedicated "connection id update" message
 that allows new connection ids to be established mid-session, because
 DTLS 1.2 in general does not allow post-handshake messages that do not
-themselves begin other handshaked. In DTLS 1.3, which does allow such
+themselves begin other handshakes. In DTLS 1.3, which does allow such
 messages, we use post-handshake message to update the connection ID
 {{post-handshake-messages}} and to request new IDs.
 
@@ -158,7 +158,7 @@ the DTLS 1.3 ServerHello.
 
 In DTLS 1.3, if the client and server have negotiated the "connection_id" extension,
 either side can send a new connection ID which it wishes the other side to use
-the NewConnectionId message:
+in a NewConnectionId message:
 
 ~~~
    enum {
@@ -190,7 +190,7 @@ either side can request a new CID using the RequestConnectionId message.
 ~~~
 
 Endpoints SHOULD respond to RequestConnectionId by sending a NewConnectionId
-with usage "cid_spare" as soon as possible. Note that endpoints MAY ignore
+with usage "cid_spare" as soon as possible. Note that an endpoint MAY ignore
 requests which it considers excessive (though they MUST be ACKed as usual).
 
 
@@ -296,7 +296,7 @@ An on-path adversary, who is able to observe the DTLS 1.2 protocol exchanges bet
 DTLS client and the DTLS server, is able to link the initial handshake to all
 subsequent payloads carrying the same connection id pair (for bi-directional
 communication). In DTLS 1.3, it is possible to provide new encrypted connection
-IDs, though of course those IDs are immediately used on the wird.
+IDs, though of course those IDs are immediately used on the wire.
 Without multi-homing and mobility the use of the connection id is not different to the
 use of the 5-tuple.
 
@@ -308,7 +308,7 @@ possible to detect). In DTLS 1.3, The RequestConnectionId message can be used
 to ask for new IDs in order to ensure that you have a pool of suitable IDs.
 
 This document does not change the security properties of DTLS 1.2 {{RFC6347}} and DTLS 1.3 {{I-D.ietf-tls-dtls13}}.
-It merely provides a more robust mechanism for associating an incoming packet with a store security context.
+It merely provides a more robust mechanism for associating an incoming packet with a stored security context.
 
 #  IANA Considerations
 
