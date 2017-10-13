@@ -244,7 +244,7 @@ Note that for both record formats, it is not possible to parse the
 records without knowing if the connection ID is in use and how long
 it is.
 
-# Example
+# Examples
 
 Below is an example exchange for DTLS 1.3 using a single
 connection id in each direction.
@@ -266,25 +266,72 @@ ClientHello                 -------->
   +cookie
 
                             <--------             ServerHello
+                                          (connection_id=100)                            
                                           EncryptedExtensions
-                                          (connection_id=100)
+                                                      (cid=5)
                                                   Certificate
+                                                      (cid=5)
                                             CertificateVerify
+                                                      (cid=5)
                                                      Finished
+                                                      (cid=5)
 
 Certificate                -------->
+(cid=100)
 CertificateVerify
+(cid=100)
 Finished
-
+(cid=100)
                            <--------                      Ack
+                                                      (cid=5)
 
 Application Data           ========>
 (cid=100)
-
                            <========         Application Data
                                                       (cid=5)
 ~~~~
-{: #dtls-example title="Example DTLS Exchange with Connection IDs"}
+{: #dtls-example title="Example DTLS 1.3 Exchange with Connection IDs"}
+
+Below is an example exchange for DTLS 1.2 using a connection id used
+uni-directionally from the client to the server.
+
+~~~~
+Client                                             Server
+------                                             ------
+
+ClientHello
+(connection_id=empty)
+                            -------->
+
+
+                            <--------      HelloVerifyRequest
+                                                     (cookie)
+
+ClientHello                 -------->
+(connection_id=empty)
+  +cookie
+
+                            <--------             ServerHello
+                                          (connection_id=100)
+                                                  Certificate
+                                            ServerKeyExchange
+                                           CertificateRequest
+                                              ServerHelloDone
+
+Certificate                 -------->
+ClientKeyExchange
+CertificateVerify
+[ChangeCipherSpec]
+Finished
+(cid=100)
+                            <--------      [ChangeCipherSpec]
+                                                     Finished
+
+Application Data           ========>
+(cid=100)
+                           <========         Application Data
+~~~~
+{: #dtls-example2 title="Example DTLS 1.2 Exchange with Connection IDs"}
 
 #  Security and Privacy Considerations {#sec-cons}
 
